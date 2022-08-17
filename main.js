@@ -114,45 +114,73 @@ async function init() {
 async function refresh() {
     console.log("refresh!");
 
-    balance = await provider.getBalance(globalObj.address);
-    // { BigNumber: "182826475815887608" }
-    // Often you need to format the output to something more user-friendly,
-    // such as in ether (instead of wei)
-    globalObj.eth = ethers.utils.formatEther(balance);
-    console.log("balance: ", globalObj.eth);
-    $(".ethBalance").text(globalObj.eth);
+    try {
+        balance = await provider.getBalance(globalObj.address);
+        // { BigNumber: "182826475815887608" }
+        // Often you need to format the output to something more user-friendly,
+        // such as in ether (instead of wei)
+        globalObj.eth = ethers.utils.formatEther(balance);
+        console.log("balance: ", globalObj.eth);
+        $(".ethBalance").text(globalObj.eth);
+    } catch (e) {
+        console.log(e);
+    }
 
-    let epochTotalReward = await genStakingContract.getEpochTotalReward();
-    globalObj.epochTotalReward = ethers.utils.formatEther(epochTotalReward);
-    console.log("epochTotalReward: ", globalObj.epochTotalReward);
-    $(".currentEpochReward").text(globalObj.epochTotalReward);
+    try {
+        let epochTotalReward = await genStakingContract.getEpochTotalReward();
+        globalObj.epochTotalReward = ethers.utils.formatEther(epochTotalReward);
+        console.log("epochTotalReward: ", globalObj.epochTotalReward);
+        $(".currentEpochReward").text(globalObj.epochTotalReward);
+    } catch (e) {
+        console.log(e);
+    }
 
-    let totalStakedStGen = await genStakingContract.getTotalStaked();
-    globalObj.totalStakedStGen = ethers.utils.formatEther(totalStakedStGen);
-    console.log("totalStakedStGen: ", globalObj.totalStakedStGen);
-    $(".totalStakedStGen").text(globalObj.totalStakedStGen);
+    try {
+        let totalStakedStGen = await genStakingContract.getTotalStaked();
+        globalObj.totalStakedStGen = ethers.utils.formatEther(totalStakedStGen);
+        console.log("totalStakedStGen: ", globalObj.totalStakedStGen);
+        $(".totalStakedStGen").text(globalObj.totalStakedStGen);
+    } catch (e) {
+        console.log(e);
+    }
+    
+    try {
+        // 유저 GEN
+        // myGenBalance
+        const genBalance = await genTokenContract.balanceOf(globalObj.address);
+        globalObj.gen = ethers.utils.formatEther(genBalance);
+        $(".myGenBalance").text(globalObj.gen);
+    } catch (e) {
+        console.log(e);
+    }
+    
+    try {
+        // myStGenBalance
+        const myStGenBalance = await stGenTokenContract.balanceOf(globalObj.address);
+        globalObj.stgen = ethers.utils.formatEther(myStGenBalance);
+        $(".myStGenBalance").text(globalObj.stgen);
+    } catch (e) {
+        console.log(e);
+    }
+    
+    try {
+        let stakingBalance = await genStakingContract.stakingBalance(globalObj.address);
+        globalObj.stakingBalance = ethers.utils.formatEther(stakingBalance);
+        console.log("stakingBalance: ", globalObj.stakingBalance);
+        $(".myStakedStGen").text(globalObj.stakingBalance);
+    } catch (e) {
+        console.log(e);
+    }
 
-    // 유저 GEN
-    // myGenBalance
-    const genBalance = await genTokenContract.balanceOf(globalObj.address);
-    globalObj.gen = ethers.utils.formatEther(genBalance);
-    $(".myGenBalance").text(globalObj.gen);
+    try {
+        let myRewards = await genStakingContract.getMyRewards(globalObj.address);
+        globalObj.myRewards = ethers.utils.formatEther(myRewards);
 
-    // myStGenBalance
-    const myStGenBalance = await stGenTokenContract.balanceOf(globalObj.address);
-    globalObj.stgen = ethers.utils.formatEther(myStGenBalance);
-    $(".myStGenBalance").text(globalObj.stgen);
-
-    let stakingBalance = await genStakingContract.stakingBalance(globalObj.address);
-    globalObj.stakingBalance = ethers.utils.formatEther(stakingBalance);
-    console.log("stakingBalance: ", globalObj.stakingBalance);
-    $(".myStakedStGen").text(globalObj.stakingBalance);
-
-    let myRewards = await genStakingContract.getMyRewards(globalObj.address);
-    globalObj.myRewards = ethers.utils.formatEther(myRewards);
-
-    let usdValue = (globalObj.myRewards * globalObj.genPrice).toFixed(4);
-    $(".myRewards").text(globalObj.myRewards + " GEN ($ " + usdValue + ")");
+        let usdValue = (globalObj.myRewards * globalObj.genPrice).toFixed(4);
+        $(".myRewards").text(globalObj.myRewards + " GEN ($ " + usdValue + ")");
+    } catch (e) {
+        console.log(e);
+    }
 }
 
 async function stake() {
