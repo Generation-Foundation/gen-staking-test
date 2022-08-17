@@ -96,7 +96,7 @@ async function init() {
 
     refresh();
     // 5초마다 갱신
-    setInterval(() => refresh(), 3000);
+    setInterval(() => refresh(), 5000);
 
     
 
