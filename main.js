@@ -38,13 +38,30 @@ async function init() {
     // https://api.probit.com/api/exchange/v1/ticker?market_ids=GEN-USDT
     const options = {method: 'GET'};
 
-    await fetch('https://api.probit.com/api/exchange/v1/ticker?market_ids=GEN-USDT', options)
-    .then(response => response.json())
-    .then(response => {
-        console.log(response);
-        globalObj.genPrice = response.data[0].last * 1;
-    })
-    .catch(err => console.error(err));
+    // await fetch('https://api.probit.com/api/exchange/v1/ticker?market_ids=GEN-USDT', options)
+    // .then(response => response.json())
+    // .then(response => {
+    //     console.log(response);
+    //     globalObj.genPrice = response.data[0].last * 1;
+    // })
+    // .catch(err => console.error(err));
+
+    try {
+        const settings = {
+            "async": true,
+            "crossDomain": true,
+            "url": "https://api.probit.com/api/exchange/v1/ticker?market_ids=GEN-USDT",
+            "method": "GET",
+            "headers": {}
+        };
+
+        $.ajax(settings).done(function (response) {
+            console.log(response);
+            globalObj.genPrice = response.data[0].last * 1;
+        });
+    } catch (error) {
+        console.log(error);
+    }
 
     console.log("globalObj.genPrice: ", globalObj.genPrice);
     $(".genPrice").text(globalObj.genPrice);
