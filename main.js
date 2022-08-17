@@ -209,7 +209,7 @@ async function stake() {
     }
 
     $.LoadingOverlay("show");
-    await sleep(3000);
+    await sleep(15000);
     $.LoadingOverlay("hide");
 
     // stake
@@ -324,7 +324,7 @@ async function burn() {
     }
 
     $.LoadingOverlay("show");
-    await sleep(3000);
+    await sleep(15000);
     $.LoadingOverlay("hide");
     
     // convertGen
