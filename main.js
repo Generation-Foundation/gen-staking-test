@@ -211,10 +211,12 @@ async function stake() {
     
     // increase allowance
     try {
-        let result0 = await stGenTokenContract.increaseAllowance(
+        let increaseAllowanceTx = await stGenTokenContract.increaseAllowance(
             GEN_STAKING_CONTRACT,
             convertedNum.toString()
         );
+        $.LoadingOverlay("show");
+        await increaseAllowanceTx.wait();
     } catch (error0) {
         $.toast({
             heading: 'Error',
@@ -225,11 +227,12 @@ async function stake() {
             icon: 'error'
         })
 
+        $.LoadingOverlay("hide");
         return;
     }
 
-    $.LoadingOverlay("show");
-    await sleep(5000);
+    // $.LoadingOverlay("show");
+    // await sleep(5000);
     $.LoadingOverlay("hide");
 
     // stake
@@ -326,10 +329,12 @@ async function burn() {
     
     // increase allowance
     try {
-        let result0 = await genTokenContract.increaseAllowance(
+        let increaseAllowanceTx = await genTokenContract.increaseAllowance(
             CONVERT_GEN_CONTRACT,
             convertedNum.toString()
         );
+        $.LoadingOverlay("show");
+        await increaseAllowanceTx.wait();
     } catch (error0) {
         $.toast({
             heading: 'Error',
@@ -339,12 +344,10 @@ async function burn() {
             hideAfter: 5000,
             icon: 'error'
         })
-
+        $.LoadingOverlay("hide");
         return;
     }
 
-    $.LoadingOverlay("show");
-    await sleep(5000);
     $.LoadingOverlay("hide");
     
     // convertGen
